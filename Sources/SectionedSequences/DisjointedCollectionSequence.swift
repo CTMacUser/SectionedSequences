@@ -65,3 +65,62 @@ extension DisjointedCollectionIterator: IteratorProtocol {
     }
 
 }
+
+// MARK: - Sub-Collection Sequence
+
+/// A sequence over fixed-sized subsequent sub-sequences of a wrapped collection.
+public struct DisjointedCollectionSequence<Base: Collection> {
+
+    /// The wrapped collection.
+    public private(set) var elements: Base
+    /// The count of each sub-collection, except possibly the last.
+    public let span: Base.IndexDistance
+
+    /**
+     Creates an instance wrapping the given collection to vend sub-collections of its elements in-order, each with a count (except possibly the last) of the given span.
+
+     - Precondition: `span > 0`.
+
+     - Parameter base: The collection of all the elements.
+
+     - Parameter span: The count of elements per sub-collection vended.  The last element may have a count shorter than this.
+
+     - Postcondition:
+         - `self.elements` is equivalent to `base`.
+         - `self.span == span`.
+     */
+    public init(_ base: Base, span: Base.IndexDistance) {
+        precondition(span > 0)
+
+        elements = base
+        self.span = span
+    }
+
+}
+
+// MARK: Sequence
+
+extension DisjointedCollectionSequence: Sequence {
+
+    public func makeIterator() -> DisjointedCollectionIterator<Base> {
+        return DisjointedCollectionIterator(elements, span: span)
+    }
+
+}
+
+extension DisjointedCollectionSequence {
+
+    public var underestimatedCount: Int {
+        return elements.isEmpty ? 0 : 1
+    }
+
+}
+
+extension DisjointedCollectionSequence where Base: RandomAccessCollection {
+
+    public var underestimatedCount: Int {
+        let (blockCount, stragglerCount) = elements.count.quotientAndRemainder(dividingBy: span)
+        return numericCast(blockCount + stragglerCount.signum())
+    }
+
+}
