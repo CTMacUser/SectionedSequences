@@ -124,3 +124,22 @@ extension DisjointedCollectionSequence where Base: RandomAccessCollection {
     }
 
 }
+
+// MARK: - Sub-Collection Sequence Generator
+
+extension Collection {
+
+    /**
+     Returns a sequence that generates the elements of this collection, in the same relative order, but segmented into sub-sequences, each with element counts of the given span.
+
+     - Precondition: `span > 0`.
+
+     - Parameter span: The count of elements per sub-collection vended.  The last element may have a count shorter than this.
+
+     - Returns: The sequence of disjoint element sub-collections.
+     */
+    public func disjoint(eachSpanning span: Self.IndexDistance) -> DisjointedCollectionSequence<Self> {
+        return DisjointedCollectionSequence(self, span: span)
+    }
+
+}

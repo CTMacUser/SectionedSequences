@@ -101,6 +101,22 @@ class DisjointedCollectionSequenceTests: XCTestCase {
         XCTAssertEqual(s4.underestimatedCount, 3)
     }
 
+    // Test getting the sub-collection sequence from the collection
+    func testCollectionDisjointed() {
+        let d = [1: "1", 2: "two", 3: "tres"]
+        let disjointedD = Array(d.disjoint(eachSpanning: 2))
+        XCTAssertEqual(disjointedD.count, 2)
+        XCTAssertEqual(disjointedD.first?.count, 2)
+        XCTAssertEqual(disjointedD.last?.count, 1)
+
+        let a = 1...5
+        let disjointedA = Array(a.disjoint(eachSpanning: 2))
+        XCTAssertEqual(disjointedA.count, 3)
+        XCTAssertTrue(disjointedA[0].elementsEqual([1, 2]))
+        XCTAssertTrue(disjointedA[1].elementsEqual([3, 4]))
+        XCTAssertTrue(disjointedA[2].elementsEqual([5]))
+    }
+
     // List of tests for Linux.
     static var allTests = [
         ("testIteratorInitialState", testIteratorInitialState),
@@ -111,6 +127,8 @@ class DisjointedCollectionSequenceTests: XCTestCase {
         ("testSequenceInitialState", testSequenceInitialState),
         ("testSequencing", testSequencing),
         ("testSequenceCount", testSequenceCount),
+
+        ("testCollectionDisjointed", testCollectionDisjointed),
     ]
 
 }
