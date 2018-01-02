@@ -3,6 +3,5 @@ import XCTest
 
 
 XCTMain([
-    testCase(SectionedSequencesTests.allTests),
     testCase(ClusteringIteratorTests.allTests),
 ])
