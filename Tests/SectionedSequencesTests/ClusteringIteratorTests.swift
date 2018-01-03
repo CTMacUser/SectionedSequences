@@ -25,8 +25,8 @@ class ClusteringIteratorTests: XCTestCase {
         super.tearDown()
     }
 
-    // Test the default initializer.
-    func testInitialState() {
+    // Test the iterator initializer.
+    func testIteratorInitializer() {
         let a = 1...5
         let i = ClusteringIterator(a.makeIterator(), span: 2)
         XCTAssertEqual(Array(IteratorSequence(i.elements)), Array(IteratorSequence(a.makeIterator())))
@@ -63,12 +63,55 @@ class ClusteringIteratorTests: XCTestCase {
         XCTAssertEqual(sectionedA[3], [16, 17, 18, 19, 20])
     }
 
+    // Test the sequence's initializer.
+    func testSequenceInitializer() {
+        let a = 1...5
+        let s = ClusteringSequence(a, span: 2)
+        XCTAssertEqual(s.elements, a)
+        XCTAssertEqual(s.span, 2)
+    }
+
+    // Test using the sequence for its purpose.
+    func testSequencing() {
+        let a = 1...5
+        let s = ClusteringSequence(a, span: 2)
+        let b = Array(s)
+        XCTAssertTrue(b.elementsEqual([[1, 2], [3, 4], [5]], by: ==))
+    }
+
+    // Test getting a sequence's underestimate of the wrapped count.
+    func testSequenceCount() {
+        // Empty, non-random-access-collection
+        var d = [Int: String]()
+        let s1 = ClusteringSequence(d, span: 2)
+        XCTAssertEqual(s1.underestimatedCount, 0)
+
+        // Non-empty, non-random-access-collection
+        d = [1: "1", 2: "two", 3: "tres"]
+        let s2 = ClusteringSequence(d, span: 2)
+        XCTAssertLessThanOrEqual(s2.underestimatedCount, 2)
+
+        // Empty, random-access collection
+        var a = [Int]()
+        let s3 = ClusteringSequence(a, span: 2)
+        XCTAssertEqual(s3.underestimatedCount, 0)
+
+        // Non-empty, random-access collection
+        a = [1, 2, 3, 4, 5]
+        let s4 = ClusteringSequence(a, span: 2)
+        XCTAssertEqual(s4.underestimatedCount, 3)
+    }
+
     // List of tests for Linux.
     static var allTests = [
-        ("testInitialState", testInitialState),
+        ("testIteratorInitializer", testIteratorInitializer),
         ("testEmptyIterator", testEmptyIterator),
         ("testInexactIteration", testInexactIteration),
         ("testFittedIteration", testFittedIteration),
+
+        ("testSequenceInitializer", testSequenceInitializer),
+        ("testSequencing", testSequencing),
+        ("testSequenceCount", testSequenceCount),
     ]
 
 }
