@@ -1,6 +1,6 @@
 /*
 
-  ClusteringIterator.swift
+  ClusteringSequence.swift
   SectionedSequences
 
   Created by Daryle Walker on 1/1/18.

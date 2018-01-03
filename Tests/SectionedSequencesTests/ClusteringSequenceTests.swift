@@ -1,6 +1,6 @@
 /*
 
-  ClusteringIteratorTests.swift
+  ClusteringSequenceTests.swift
   SectionedSequencesTests
 
   Created by Daryle Walker on 1/1/18.
@@ -13,7 +13,7 @@ import XCTest
 @testable import SectionedSequences
 
 
-class ClusteringIteratorTests: XCTestCase {
+class ClusteringSequenceTests: XCTestCase {
 
     override func setUp() {
         super.setUp()

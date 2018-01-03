@@ -3,6 +3,6 @@ import XCTest
 
 
 XCTMain([
-    testCase(ClusteringIteratorTests.allTests),
+    testCase(ClusteringSequenceTests.allTests),
     testCase(DisjointedCollectionSequenceTests.allTests),
 ])
