@@ -102,6 +102,17 @@ class ClusteringIteratorTests: XCTestCase {
         XCTAssertEqual(s4.underestimatedCount, 3)
     }
 
+    // Test getting the sequence's collection sequence
+    func testSequenceClustered() {
+        let d = [1: "1", 2: "two", 3: "tres"]
+        let clusteredD = Array(d.clustered(eachSpanning: 2))
+        XCTAssertEqual(clusteredD.map { $0.count }, [2, 1])
+
+        let a = 1...5
+        let clusteredA = Array(a.clustered(eachSpanning: 2))
+        XCTAssertTrue(clusteredA.elementsEqual([[1, 2], [3, 4], [5]], by: ==))
+    }
+
     // List of tests for Linux.
     static var allTests = [
         ("testIteratorInitializer", testIteratorInitializer),
@@ -112,6 +123,8 @@ class ClusteringIteratorTests: XCTestCase {
         ("testSequenceInitializer", testSequenceInitializer),
         ("testSequencing", testSequencing),
         ("testSequenceCount", testSequenceCount),
+
+        ("testSequenceClustered", testSequenceClustered),
     ]
 
 }

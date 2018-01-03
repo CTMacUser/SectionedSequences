@@ -122,3 +122,22 @@ extension ClusteringSequence where Base: RandomAccessCollection {
     }
 
 }
+
+// MARK: - Element-Clustering Sequence Generator
+
+extension Sequence {
+
+    /**
+     Returns a sequence that generates the elements of this sequence, in the same relative order, but segmented into collections, each with element counts of the given span.
+
+     - Precondition: `span > 0`.
+
+     - Parameter span: The count of elements per collection vended.  The last element may have a count shorter than this.
+
+     - Returns: The sequence of disjoint element collections.
+     */
+    public func clustered(eachSpanning span: Int) -> ClusteringSequence<Self> {
+        return ClusteringSequence(self, span: span)
+    }
+
+}
