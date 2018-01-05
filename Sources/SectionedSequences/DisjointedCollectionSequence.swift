@@ -55,13 +55,9 @@ extension DisjointedCollectionIterator: IteratorProtocol {
     public mutating func next() -> Base.SubSequence? {
         guard start < base.endIndex else { return nil }
 
-        if let nextIndex = base.index(start, offsetBy: span, limitedBy: base.endIndex) {
-            defer { start = nextIndex }
-            return base[start ..< nextIndex]
-        } else {
-            defer { start = base.endIndex }
-            return base[start...]
-        }
+        let nextIndex = base.index(start, offsetBy: span, limitedBy: base.endIndex) ?? base.endIndex
+        defer { start = nextIndex }
+        return base[start ..< nextIndex]
     }
 
 }

@@ -75,8 +75,9 @@ class ClusteringSequenceTests: XCTestCase {
     func testSequencing() {
         let a = 1...5
         let s = ClusteringSequence(a, span: 2)
-        let b = Array(s)
-        XCTAssertTrue(b.elementsEqual([[1, 2], [3, 4], [5]], by: ==))
+        let expected = [1...2, 3...4, 5...5].map { Array($0) }
+        XCTAssertTrue(Array(s).elementsEqual(expected, by: ==))
+        XCTAssertTrue(Array(s.elements).elementsEqual(expected, by: ==))
     }
 
     // Test getting a sequence's underestimate of the wrapped count.

@@ -43,20 +43,22 @@ class DisjointedCollectionSequenceTests: XCTestCase {
     // Test the iterator on a collection whose length is an exact multiple of the span.
     func testIteratorFittedCollection() {
         let a = 1...6
-        var i = DisjointedCollectionIterator(a, span: 3)
-        XCTAssertTrue(i.next()?.elementsEqual(1...3) ?? false)
-        XCTAssertTrue(i.next()?.elementsEqual(4...6) ?? false)
-        XCTAssertNil(i.next())
+        let i = DisjointedCollectionIterator(a, span: 3)
+        let b = Array(IteratorSequence(i))
+        XCTAssertEqual(b.count, 2)
+        XCTAssertTrue(b[0].elementsEqual(1...3))
+        XCTAssertTrue(b[1].elementsEqual(4...6))
     }
 
     // Test the iterator on a collection whose length isn't divisible by the span.
     func testIteratorUnfittingCollection() {
         let a = 1...8
-        var i = DisjointedCollectionIterator(a, span: 3)
-        XCTAssertTrue(i.next()?.elementsEqual(1...3) ?? false)
-        XCTAssertTrue(i.next()?.elementsEqual(4...6) ?? false)
-        XCTAssertTrue(i.next()?.elementsEqual(7...8) ?? false)
-        XCTAssertNil(i.next())
+        let i = DisjointedCollectionIterator(a, span: 3)
+        let b = Array(IteratorSequence(i))
+        XCTAssertEqual(b.count, 3)
+        XCTAssertTrue(b[0].elementsEqual(1...3))
+        XCTAssertTrue(b[1].elementsEqual(4...6))
+        XCTAssertTrue(b[2].elementsEqual(7...8))
     }
 
     // Test the sequence's initializer.
@@ -76,6 +78,11 @@ class DisjointedCollectionSequenceTests: XCTestCase {
         XCTAssertTrue(b[0].elementsEqual([1, 2]))
         XCTAssertTrue(b[1].elementsEqual([3, 4]))
         XCTAssertTrue(b[2].elementsEqual([5]))
+        let be = Array(s.elements)
+        XCTAssertEqual(be.count, 3)
+        XCTAssertTrue(be[0].elementsEqual(1...2))
+        XCTAssertTrue(be[1].elementsEqual(3...4))
+        XCTAssertTrue(be[2].elementsEqual(5...5))
     }
 
     // Test getting a sequence's underestimate of the wrapped count.
