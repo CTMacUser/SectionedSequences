@@ -18,7 +18,7 @@
 public struct ClusteringIterator<Base: IteratorProtocol> {
 
     /// The wrapped iterator.
-    public private(set) var elements: Base
+    public private(set) var base: Base
     /// The count of inner elements per collection element, except possibly the last.
     public let span: Int
 
@@ -32,13 +32,13 @@ public struct ClusteringIterator<Base: IteratorProtocol> {
      - Parameter span: The count of inner elements per collection element vended.  The last element may have a count shorter than this.
 
      - Postcondition:
-         - `self.elements` is equivalent to `base`.
+         - `self.base` is equivalent to `base`.
          - `self.span == span`.
      */
     public init(_ base: Base, span: Int) {
         precondition(span > 0)
 
-        elements = base
+        self.base = base
         self.span = span
     }
 
@@ -52,7 +52,7 @@ extension ClusteringIterator: IteratorProtocol {
         var result = [Base.Element]()
         result.reserveCapacity(span)
         for _ in 0..<span {
-            guard let latest = elements.next() else { break }
+            guard let latest = base.next() else { break }
 
             result.append(latest)
         }
@@ -69,7 +69,7 @@ extension ClusteringIterator: IteratorProtocol {
 public struct ClusteringSequence<Base: Sequence> {
 
     /// The wrapped sequence.
-    public private(set) var elements: Base
+    public private(set) var base: Base
     /// The count of each collection, except possibly the last.
     public let span: Int
 
@@ -83,13 +83,13 @@ public struct ClusteringSequence<Base: Sequence> {
      - Parameter span: The count of inner elements per collection vended.  The last element may have a count shorter than this.
 
      - Postcondition:
-         - `self.elements` is equivalent to `base`.
+         - `self.base` is equivalent to `base`.
          - `self.span == span`.
      */
     public init(_ base: Base, span: Int) {
         precondition(span > 0)
 
-        elements = base
+        self.base = base
         self.span = span
     }
 
@@ -100,7 +100,7 @@ public struct ClusteringSequence<Base: Sequence> {
 extension ClusteringSequence: Sequence {
 
     public func makeIterator() -> ClusteringIterator<Base.Iterator> {
-        return ClusteringIterator(elements.makeIterator(), span: span)
+        return ClusteringIterator(base.makeIterator(), span: span)
     }
 
 }
@@ -108,7 +108,7 @@ extension ClusteringSequence: Sequence {
 extension ClusteringSequence {
 
     public var underestimatedCount: Int {
-        let (blockCount, stragglerCount) = elements.underestimatedCount.quotientAndRemainder(dividingBy: span)
+        let (blockCount, stragglerCount) = base.underestimatedCount.quotientAndRemainder(dividingBy: span)
         return blockCount + stragglerCount.signum()
     }
 
@@ -117,7 +117,7 @@ extension ClusteringSequence {
 extension ClusteringSequence where Base: RandomAccessCollection {
 
     public var underestimatedCount: Int {
-        let (blockCount, stragglerCount) = elements.count.quotientAndRemainder(dividingBy: numericCast(span))
+        let (blockCount, stragglerCount) = base.count.quotientAndRemainder(dividingBy: numericCast(span))
         return numericCast(blockCount + stragglerCount.signum())
     }
 

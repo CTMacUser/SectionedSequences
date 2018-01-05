@@ -29,7 +29,7 @@ class ClusteringSequenceTests: XCTestCase {
     func testIteratorInitializer() {
         let a = 1...5
         let i = ClusteringIterator(a.makeIterator(), span: 2)
-        XCTAssertEqual(Array(IteratorSequence(i.elements)), Array(IteratorSequence(a.makeIterator())))
+        XCTAssertEqual(Array(IteratorSequence(i.base)), Array(IteratorSequence(a.makeIterator())))
         XCTAssertEqual(i.span, 2)
     }
 
@@ -67,7 +67,7 @@ class ClusteringSequenceTests: XCTestCase {
     func testSequenceInitializer() {
         let a = 1...5
         let s = ClusteringSequence(a, span: 2)
-        XCTAssertEqual(s.elements, a)
+        XCTAssertEqual(s.base, a)
         XCTAssertEqual(s.span, 2)
     }
 

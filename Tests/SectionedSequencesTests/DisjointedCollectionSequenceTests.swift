@@ -29,7 +29,7 @@ class DisjointedCollectionSequenceTests: XCTestCase {
     func testIteratorInitialState() {
         let a = 1...5
         let i = DisjointedCollectionIterator(a, span: 2)
-        XCTAssertEqual(i.elements, a)
+        XCTAssertEqual(i.base, a)
         XCTAssertEqual(i.span, 2)
         XCTAssertEqual(i.start, a.startIndex)
     }
@@ -63,7 +63,7 @@ class DisjointedCollectionSequenceTests: XCTestCase {
     func testSequenceInitialState() {
         let a = 1...5
         let s = DisjointedCollectionSequence(a, span: 2)
-        XCTAssertEqual(s.elements, a)
+        XCTAssertEqual(s.base, a)
         XCTAssertEqual(s.span, 2)
     }
 

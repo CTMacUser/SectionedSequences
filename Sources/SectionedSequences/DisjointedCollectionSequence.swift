@@ -18,7 +18,7 @@
 public struct DisjointedCollectionIterator<Base: Collection> {
 
     /// The wrapped collection.
-    public private(set) var elements: Base
+    public private(set) var base: Base
     /// The count of each sub-collection, except possibly the last.
     public let span: Base.IndexDistance
     /// The starting index of the next sub-collection.
@@ -34,16 +34,16 @@ public struct DisjointedCollectionIterator<Base: Collection> {
      - Parameter span: The count of elements per sub-collection vended.  The last element may have a count shorter than this.
 
      - Postcondition:
-         - `self.elements` is equivalent to `base`.
+         - `self.base` is equivalent to `base`.
          - `self.span == span`.
-         - The first sub-collection to return is at the start of `self.elements` (if not empty).
+         - The first sub-collection to return is at the start of `self.base` (if not empty).
      */
     public init(_ base: Base, span: Base.IndexDistance) {
         precondition(span > 0)
 
-        elements = base
+        self.base = base
         self.span = span
-        start = elements.startIndex
+        start = base.startIndex
     }
 
 }
@@ -53,14 +53,14 @@ public struct DisjointedCollectionIterator<Base: Collection> {
 extension DisjointedCollectionIterator: IteratorProtocol {
 
     public mutating func next() -> Base.SubSequence? {
-        guard start < elements.endIndex else { return nil }
+        guard start < base.endIndex else { return nil }
 
-        if let nextIndex = elements.index(start, offsetBy: span, limitedBy: elements.endIndex) {
+        if let nextIndex = base.index(start, offsetBy: span, limitedBy: base.endIndex) {
             defer { start = nextIndex }
-            return elements[start ..< nextIndex]
+            return base[start ..< nextIndex]
         } else {
-            defer { start = elements.endIndex }
-            return elements[start...]
+            defer { start = base.endIndex }
+            return base[start...]
         }
     }
 
@@ -72,7 +72,7 @@ extension DisjointedCollectionIterator: IteratorProtocol {
 public struct DisjointedCollectionSequence<Base: Collection> {
 
     /// The wrapped collection.
-    public private(set) var elements: Base
+    public private(set) var base: Base
     /// The count of each sub-collection, except possibly the last.
     public let span: Base.IndexDistance
 
@@ -86,13 +86,13 @@ public struct DisjointedCollectionSequence<Base: Collection> {
      - Parameter span: The count of elements per sub-collection vended.  The last element may have a count shorter than this.
 
      - Postcondition:
-         - `self.elements` is equivalent to `base`.
+         - `self.base` is equivalent to `base`.
          - `self.span == span`.
      */
     public init(_ base: Base, span: Base.IndexDistance) {
         precondition(span > 0)
 
-        elements = base
+        self.base = base
         self.span = span
     }
 
@@ -103,7 +103,7 @@ public struct DisjointedCollectionSequence<Base: Collection> {
 extension DisjointedCollectionSequence: Sequence {
 
     public func makeIterator() -> DisjointedCollectionIterator<Base> {
-        return DisjointedCollectionIterator(elements, span: span)
+        return DisjointedCollectionIterator(base, span: span)
     }
 
 }
@@ -111,7 +111,7 @@ extension DisjointedCollectionSequence: Sequence {
 extension DisjointedCollectionSequence {
 
     public var underestimatedCount: Int {
-        return elements.isEmpty ? 0 : 1
+        return base.isEmpty ? 0 : 1
     }
 
 }
@@ -119,7 +119,7 @@ extension DisjointedCollectionSequence {
 extension DisjointedCollectionSequence where Base: RandomAccessCollection {
 
     public var underestimatedCount: Int {
-        let (blockCount, stragglerCount) = elements.count.quotientAndRemainder(dividingBy: span)
+        let (blockCount, stragglerCount) = base.count.quotientAndRemainder(dividingBy: span)
         return numericCast(blockCount + stragglerCount.signum())
     }
 
