@@ -62,6 +62,25 @@ extension DisjointedCollectionIterator: IteratorProtocol {
 
 }
 
+// MARK: - Sub-Collections from a Collection
+
+extension Collection {
+
+    /**
+     Returns a collection made of fixed-size sub-collections of this collection's elements in-order.
+
+     - Precondition: `span > 0`.
+
+     - Parameter span: The count of elements per inner collection.  The last inner collection may have a count shorter than this.
+
+     - Returns: The collection of disjoint element collections.
+     */
+    public func disjoint(eachSpanning span: IndexDistance) -> [SubSequence] {
+        return Array(IteratorSequence(DisjointedCollectionIterator(self, span: span)))
+    }
+
+}
+
 // MARK: - Sub-Collection Sequence
 
 /// A sequence over fixed-sized subsequent sub-sequences of a wrapped collection.

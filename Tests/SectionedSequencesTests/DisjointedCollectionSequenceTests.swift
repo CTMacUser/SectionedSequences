@@ -61,6 +61,15 @@ class DisjointedCollectionSequenceTests: XCTestCase {
         XCTAssertTrue(b[2].elementsEqual(7...8))
     }
 
+    // Test eager generation of a collection's fixed-sized sub-collections.
+    func testEagerDisjointed() {
+        let d = (1...5).disjoint(eachSpanning: 2)
+        XCTAssertEqual(d.count, 3)
+        XCTAssertTrue(d[0].elementsEqual([1, 2]))
+        XCTAssertTrue(d[1].elementsEqual([3, 4]))
+        XCTAssertTrue(d[2].elementsEqual([5]))
+    }
+
     // Test the sequence's initializer.
     func testSequenceInitialState() {
         let a = 1...5
@@ -130,6 +139,8 @@ class DisjointedCollectionSequenceTests: XCTestCase {
         ("testIteratorEmptyCollection", testIteratorEmptyCollection),
         ("testIteratorFittedCollection", testIteratorFittedCollection),
         ("testIteratorUnfittingCollection", testIteratorUnfittingCollection),
+
+        ("testEagerDisjointed", testEagerDisjointed),
 
         ("testSequenceInitialState", testSequenceInitialState),
         ("testSequencing", testSequencing),

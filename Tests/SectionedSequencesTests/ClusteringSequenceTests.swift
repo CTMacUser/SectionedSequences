@@ -63,6 +63,11 @@ class ClusteringSequenceTests: XCTestCase {
         XCTAssertEqual(sectionedA[3], [16, 17, 18, 19, 20])
     }
 
+    // Test eager generation of a sequence's collection of sub-seqeunces.
+    func testEagerClustered() {
+        XCTAssertTrue((1...5).clustered(eachSpanning: 2).elementsEqual([[1, 2], [3, 4], [5]], by: ==))
+    }
+
     // Test the sequence's initializer.
     func testSequenceInitializer() {
         let a = 1...5
@@ -120,6 +125,8 @@ class ClusteringSequenceTests: XCTestCase {
         ("testEmptyIterator", testEmptyIterator),
         ("testInexactIteration", testInexactIteration),
         ("testFittedIteration", testFittedIteration),
+
+        ("testEagerClustered", testEagerClustered),
 
         ("testSequenceInitializer", testSequenceInitializer),
         ("testSequencing", testSequencing),

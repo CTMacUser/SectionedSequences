@@ -63,6 +63,27 @@ extension ClusteringIterator: IteratorProtocol {
 
 }
 
+// MARK: - Clustered-Elements from a Sequence
+
+extension Sequence {
+
+    /**
+     Returns a collection made of collections of this sequence's elements clustered in-order to a fixed size.
+
+     - Precondition:
+         - `span > 0`.
+         - This sequence must be finite.
+
+     - Parameter span: The count of elements per inner collection.  The last inner collection may have a count shorter than this.
+
+     - Returns: The collection of disjoint element collections.
+     */
+    public func clustered(eachSpanning span: Int) -> [[Element]] {
+        return Array(IteratorSequence(ClusteringIterator(makeIterator(), span: span)))
+    }
+
+}
+
 // MARK: - Element-Clustering Sequence
 
 /// A sequence that wraps another and vends fixed-size collections of the inner sequence's elements.
