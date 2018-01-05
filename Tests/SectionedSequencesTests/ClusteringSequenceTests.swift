@@ -105,11 +105,11 @@ class ClusteringSequenceTests: XCTestCase {
     // Test getting the sequence's collection sequence
     func testSequenceClustered() {
         let d = [1: "1", 2: "two", 3: "tres"]
-        let clusteredD = Array(d.clustered(eachSpanning: 2))
+        let clusteredD = Array(d.lazy.clustered(eachSpanning: 2))
         XCTAssertEqual(clusteredD.map { $0.count }, [2, 1])
 
         let a = 1...5
-        let clusteredA = Array(a.clustered(eachSpanning: 2))
+        let clusteredA = Array(a.lazy.clustered(eachSpanning: 2))
         XCTAssertTrue(clusteredA.elementsEqual([[1, 2], [3, 4], [5]], by: ==))
     }
 

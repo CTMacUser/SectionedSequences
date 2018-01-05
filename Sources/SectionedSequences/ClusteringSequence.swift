@@ -123,9 +123,13 @@ extension ClusteringSequence where Base: RandomAccessCollection {
 
 }
 
+// MARK: LazySequenceProtocol
+
+extension ClusteringSequence: LazySequenceProtocol {}
+
 // MARK: - Element-Clustering Sequence Generator
 
-extension Sequence {
+extension LazySequenceProtocol {
 
     /**
      Returns a sequence that generates the elements of this sequence, in the same relative order, but segmented into collections, each with element counts of the given span.

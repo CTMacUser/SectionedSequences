@@ -125,9 +125,13 @@ extension DisjointedCollectionSequence where Base: RandomAccessCollection {
 
 }
 
+// MARK: LazySequenceProtocol
+
+extension DisjointedCollectionSequence: LazySequenceProtocol {}
+
 // MARK: - Sub-Collection Sequence Generator
 
-extension Collection {
+extension LazyCollectionProtocol {
 
     /**
      Returns a sequence that generates the elements of this collection, in the same relative order, but segmented into sub-sequences, each with element counts of the given span.

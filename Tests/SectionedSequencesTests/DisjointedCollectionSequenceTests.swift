@@ -104,13 +104,13 @@ class DisjointedCollectionSequenceTests: XCTestCase {
     // Test getting the sub-collection sequence from the collection
     func testCollectionDisjointed() {
         let d = [1: "1", 2: "two", 3: "tres"]
-        let disjointedD = Array(d.disjoint(eachSpanning: 2))
+        let disjointedD = Array(d.lazy.disjoint(eachSpanning: 2))
         XCTAssertEqual(disjointedD.count, 2)
         XCTAssertEqual(disjointedD.first?.count, 2)
         XCTAssertEqual(disjointedD.last?.count, 1)
 
         let a = 1...5
-        let disjointedA = Array(a.disjoint(eachSpanning: 2))
+        let disjointedA = Array(a.lazy.disjoint(eachSpanning: 2))
         XCTAssertEqual(disjointedA.count, 3)
         XCTAssertTrue(disjointedA[0].elementsEqual([1, 2]))
         XCTAssertTrue(disjointedA[1].elementsEqual([3, 4]))
