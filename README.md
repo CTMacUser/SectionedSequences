@@ -6,7 +6,7 @@ For a given *sequencing source*, its *chunked sequence* with a parameter *N* as 
 
 ## Installation
 
-Use the [Swift Package Manager](https://github.com/apple/swift-package-manager) to incorporate this repository as a library.  Or download a copy and add the applicable files to your project directly.
+Use the [Swift Package Manager](https://swift.org/package-manager/) to incorporate this repository as a library.  Or download a copy and add the applicable files to your project directly.
 
 ## Type Overview
 
