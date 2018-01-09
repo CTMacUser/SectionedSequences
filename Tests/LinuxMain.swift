@@ -5,4 +5,5 @@ import XCTest
 XCTMain([
     testCase(ClusteringSequenceTests.allTests),
     testCase(DisjointedCollectionSequenceTests.allTests),
+    testCase(ChunkedCollectionTests.allTests),
 ])
